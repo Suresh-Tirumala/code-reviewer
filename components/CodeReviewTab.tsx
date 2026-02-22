@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { analyzeCode, rewriteCode } from '../services/aiService';
+import { saveReview } from '../services/reviewStoreService';
 import { CodeReviewResult, CodeRewriteResult, Severity } from '../types';
 
 export const CodeReviewTab: React.FC = () => {
@@ -27,6 +28,11 @@ export const CodeReviewTab: React.FC = () => {
     try {
       const data = await analyzeCode(code, language, focusAreas);
       setResult(data);
+      try {
+        await saveReview(code, language, focusAreas, data);
+      } catch (saveError) {
+        console.error('Review save failed:', saveError);
+      }
     } catch (error) {
       console.error('Review failed:', error);
       const errorMessage = error instanceof Error

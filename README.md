@@ -30,8 +30,19 @@
 Create a `.env` file in the project root:
 
 ```bash
-# API Key for Gemini (Required for all AI features)
+# AI Keys
+GROQ_API_KEY=your_groq_api_key_here
 GEMINI_API_KEY=your_gemini_api_key_here
+
+# MongoDB (backend)
+MONGODB_URI=your_mongodb_connection_string
+MONGODB_DB_NAME=ai_code_reviewer
+
+# Frontend to backend URL
+VITE_API_BASE_URL=http://localhost:4000
+
+# Backend port
+PORT=4000
 ```
 
 ### 3. Installation
@@ -39,19 +50,31 @@ GEMINI_API_KEY=your_gemini_api_key_here
 npm install
 ```
 
-### 4. Start Development Server
+### 4. Start Backend API (MongoDB)
+```bash
+npm run server
+```
+
+### 5. Start Frontend Development Server
 ```bash
 npm run dev
 ```
 The application will be accessible at `http://localhost:5173`.
 
+MongoDB API will be accessible at `http://localhost:4000`.
+
+### 6. Test MongoDB Connection
+```bash
+curl http://localhost:4000/api/health
+```
+
 ## 📁 Project Architecture
 
-- `src/services/geminiService.ts`: Core AI logic using Gemini 3 Flash for analysis and Gemini 2.5 for TTS.
-- `src/services/logoService.ts`: Specialized service for AI image generation and branding.
-- `src/components/Antigravity.tsx`: 3D particle background engine.
-- `src/components/LogoGenerator.tsx`: UI for custom identity synthesis.
-- `src/components/AssistantPanel.tsx`: Persistent multimodal interaction hub.
+- `services/aiService.ts`: Core AI logic using Groq models for analysis, rewrite, and chat.
+- `services/geminiService.ts`: Gemini-specific logic used by selected multimodal features.
+- `services/reviewStoreService.ts`: Frontend persistence client for MongoDB review storage.
+- `server/index.js`: Express API routes for health and review persistence.
+- `server/db.js`: MongoDB connection and collection helpers.
 
 ---
 *Crafted for speed. Powered by Gemini.*

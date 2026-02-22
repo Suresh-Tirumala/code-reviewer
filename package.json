@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node server/index.js",
     "build": "tsc && vite build",
     "lint": "tsc --noEmit",
     "preview": "vite preview"
@@ -13,8 +14,12 @@
     "@google/genai": "^1.41.0",
     "@react-three/fiber": "^9.5.0",
     "@types/three": "^0.183.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
     "gsap": "^3.14.2",
     "lucide-react": "^0.575.0",
+    "mongodb": "^7.1.0",
     "motion": "^12.34.3",
     "ogl": "^1.0.11",
     "react": "^19.0.0",
