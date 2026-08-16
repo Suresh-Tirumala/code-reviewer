@@ -4,7 +4,6 @@ import { Sidebar } from './components/Sidebar';
 import { AssistantPanel } from './components/AssistantPanel';
 import { Login } from './components/Login';
 import { LandingPage } from './components/LandingPage';
-import { LogoGenerator } from './components/LogoGenerator';
 import { AboutModal } from './components/AboutModal';
 import { analyzeCode, rewriteCode, runSimulatedCode } from './services/aiService';
 import { TabType, User, CodeReviewResult, CodeRewriteResult, TerminalOutput, HistoryItem, Severity } from './types';
@@ -21,7 +20,7 @@ const App: React.FC = () => {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [view, setView] = useState<'landing' | 'auth' | 'app'>(user ? 'app' : 'landing');
   
-  const [customLogo, setCustomLogo] = useState<string | null>(() => {
+  const [customLogo] = useState<string | null>(() => {
     return localStorage.getItem('custom_robot_logo');
   });
   const [showAbout, setShowAbout] = useState(false);
@@ -39,11 +38,6 @@ const App: React.FC = () => {
     localStorage.setItem('code_reviewer_history', JSON.stringify(history));
   }, [history]);
 
-  useEffect(() => {
-    if (customLogo) {
-      localStorage.setItem('custom_robot_logo', customLogo);
-    }
-  }, [customLogo]);
 
   useEffect(() => {
     if (code.length > 5 && (window as any).hljs) {
@@ -621,10 +615,6 @@ const App: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="pt-8 border-t border-slate-100">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Visual Identity</p>
-                    <LogoGenerator onLogoGenerated={setCustomLogo} currentLogo={customLogo || undefined} />
-                  </div>
 
                   <div className="pt-8 border-t border-slate-100">
                     <button 
