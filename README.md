@@ -32,6 +32,20 @@ Create a `.env` file in the project root:
 ```bash
 # API Key for Gemini (Required for all AI features)
 GEMINI_API_KEY=your_gemini_api_key_here
+
+# API Key for Groq (used by core review/rewrite/chat flows)
+GROQ_API_KEY=your_groq_api_key_here
+
+# MySQL configuration for backend API
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=code_reviewer
+MYSQL_CONNECTION_LIMIT=10
+
+# Backend server port
+PORT=4000
 ```
 
 ### 3. Installation
@@ -44,6 +58,12 @@ npm install
 npm run dev
 ```
 The application will be accessible at `http://localhost:5173`.
+
+### 5. Start Backend API (MySQL)
+```bash
+npm run server
+```
+Health check endpoint: `http://localhost:4000/api/health`
 
 ## 📁 Project Architecture
 

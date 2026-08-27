@@ -18,7 +18,11 @@ async function groqChat(
   jsonMode: boolean = false
 ) {
   const apiKey = getGroqKey();
-  if (!apiKey) throw new Error("Groq API Key is missing. Check your .env file.");
+  if (!apiKey) throw new Error(
+    "❌ Groq API Key is missing or empty.\n" +
+    "• Local dev: Add GROQ_API_KEY to your .env file\n" +
+    "• Deployed: Add GROQ_API_KEY in your platform's Environment Variables dashboard, then redeploy."
+  );
 
   const response = await fetch(GROQ_API_URL, {
     method: "POST",
