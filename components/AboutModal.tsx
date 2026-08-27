@@ -25,7 +25,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto overflow-x-hidden bg-slate-900 border border-white/10 rounded-3xl shadow-2xl"
           >
             <div className="p-8 md:p-12">
               <button

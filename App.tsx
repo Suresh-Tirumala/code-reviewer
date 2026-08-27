@@ -213,25 +213,25 @@ const App: React.FC = () => {
   };
 
   const actionButtons = (
-    <div className="flex items-center gap-3">
+    <div className="w-full md:w-auto flex flex-wrap items-center justify-center md:justify-end gap-2 md:gap-3">
       <button 
         onClick={handleRun}
         disabled={!!loading}
-        className="px-5 py-2.5 bg-slate-800 text-white rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-slate-700 hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
+        className="px-4 py-2 md:px-5 md:py-2.5 bg-slate-800 text-white rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 hover:bg-slate-700 hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
       >
         <i className={`fas ${loading === 'run' ? 'fa-circle-notch animate-spin' : 'fa-play'} text-xs`}></i> Run
       </button>
       <button 
         onClick={handleRewrite}
         disabled={!!loading}
-        className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-emerald-500 hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
+        className="px-4 py-2 md:px-5 md:py-2.5 bg-emerald-600 text-white rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 hover:bg-emerald-500 hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
       >
         <i className={`fas ${loading === 'rewrite' ? 'fa-circle-notch animate-spin' : 'fa-wand-magic-sparkles'} text-xs`}></i> Rewrite
       </button>
       <button 
         onClick={handleReview}
         disabled={!!loading}
-        className="px-5 py-2.5 bg-orange-600 text-white rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-orange-500 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-orange-500/20 disabled:opacity-50"
+        className="px-4 py-2 md:px-5 md:py-2.5 bg-orange-600 text-white rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 hover:bg-orange-500 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-orange-500/20 disabled:opacity-50"
       >
         <i className={`fas ${loading === 'review' ? 'fa-circle-notch animate-spin' : 'fa-bolt'} text-xs`}></i> Analyze
       </button>
@@ -239,7 +239,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <div className="flex min-h-screen bg-slate-100 pb-16 md:pb-0">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -249,19 +249,19 @@ const App: React.FC = () => {
         customLogo={customLogo}
       />
       
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         <main className="flex-1 flex flex-col p-4 md:p-8 max-w-[1400px] mx-auto w-full relative">
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
-            <div>
-              <h1 className="text-4xl font-black text-[#1e293b] tracking-tight">Coding Workspace</h1>
-              <div className="mt-2 flex flex-wrap items-center gap-3">
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-8 gap-4">
+            <div className="w-full md:w-auto md:min-w-0">
+              <h1 className="text-2xl md:text-4xl font-black text-[#1e293b] tracking-tight text-center md:text-left">Coding Workspace</h1>
+              <div className="mt-2 flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 text-white rounded-full text-[10px] font-black shadow-lg shadow-indigo-600/30 ring-2 ring-indigo-400/20">
                   <i className="fas fa-microchip text-indigo-200 animate-pulse"></i>
                   <span className="uppercase tracking-widest">LANG:</span>
                   <span className="bg-white/20 px-1.5 py-0.5 rounded uppercase tracking-tighter">{language}</span>
                 </div>
                 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {['Bugs', 'Security', 'Performance', 'Cleanliness'].map(area => (
                     <button 
                       key={area}
@@ -283,8 +283,8 @@ const App: React.FC = () => {
 
           <div className="grid grid-cols-1 gap-6 flex-1">
             {activeTab === 'editor' && (
-              <div className="bg-white rounded-2xl border border-slate-custom shadow-xl flex flex-col overflow-hidden h-full min-h-[700px]">
-                 <div className="px-6 py-4 border-b border-slate-custom flex justify-between items-center bg-slate-50">
+              <div className="bg-white rounded-2xl border border-slate-custom shadow-xl flex flex-col overflow-hidden h-full min-h-[50vh] md:min-h-[700px]">
+                 <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-custom flex justify-between items-center bg-slate-50 gap-2">
                     <div className="flex items-center gap-4">
                       <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">MAIN EDITOR</span>
                     </div>
@@ -299,7 +299,7 @@ const App: React.FC = () => {
                     <textarea 
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
-                      className="absolute inset-0 w-full h-full p-10 code-font text-slate-700 focus:outline-none resize-none bg-transparent"
+                      className="absolute inset-0 w-full h-full p-4 md:p-10 code-font text-slate-700 focus:outline-none resize-none bg-transparent"
                       spellCheck={false}
                     />
                  </div>
@@ -307,11 +307,11 @@ const App: React.FC = () => {
             )}
 
             {activeTab === 'review' && (
-              <div className="bg-white rounded-2xl border border-slate-custom shadow-xl flex flex-col overflow-hidden h-full min-h-[600px]">
-                <div className="px-6 py-4 border-b border-slate-custom flex justify-between items-center bg-slate-50">
+              <div className="bg-white rounded-2xl border border-slate-custom shadow-xl flex flex-col overflow-hidden h-full min-h-[60vh] md:min-h-[600px]">
+                <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-custom flex justify-between items-center bg-slate-50 gap-2">
                   <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">REVIEW ANALYSIS</span>
                   {review && (
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap justify-end gap-1.5 md:gap-2">
                       {focus.map(f => (
                         <span key={f} className="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] font-black uppercase rounded border border-indigo-100">
                           {f}
@@ -321,7 +321,7 @@ const App: React.FC = () => {
                   )}
                 </div>
                 
-                <div className="flex-1 p-10 overflow-y-auto custom-scrollbar bg-[#fcfcfd]">
+                <div className="flex-1 p-4 md:p-10 overflow-y-auto custom-scrollbar bg-[#fcfcfd]">
                   {review ? (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-500">
                       <div className="lg:col-span-2 space-y-12">
@@ -425,8 +425,8 @@ const App: React.FC = () => {
 
             {activeTab === 'rewrite' && (
                <div className="space-y-6">
-                 <div className="bg-white rounded-2xl border border-slate-custom shadow-xl overflow-hidden flex flex-col min-h-[600px]">
-                    <div className="px-6 py-4 border-b border-slate-custom bg-slate-50 flex justify-between items-center">
+                 <div className="bg-white rounded-2xl border border-slate-custom shadow-xl overflow-hidden flex flex-col min-h-[60vh] md:min-h-[600px]">
+                    <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-custom bg-slate-50 flex justify-between items-center gap-2">
                       <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">REFACTORED RESULT</span>
                       {rewrite?.rewrittenCode && (
                         <button 
@@ -437,7 +437,7 @@ const App: React.FC = () => {
                         </button>
                       )}
                     </div>
-                    <div className="p-10 bg-white space-y-10">
+                    <div className="p-4 md:p-10 bg-white space-y-6 md:space-y-10">
                       {rewrite ? (
                         <div className="animate-in fade-in duration-300">
                           <div className="prose max-w-none prose-slate border-b border-slate-100 pb-10" 
@@ -472,8 +472,8 @@ const App: React.FC = () => {
             )}
 
             {activeTab === 'output' && (
-              <div className="bg-slate-900 rounded-2xl shadow-2xl overflow-hidden h-[750px] flex flex-col border border-slate-800">
-                <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950">
+              <div className="bg-slate-900 rounded-2xl shadow-2xl overflow-hidden h-[70vh] md:h-[750px] flex flex-col border border-slate-800">
+                <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950 gap-2">
                    <div className="flex items-center gap-4">
                       <span className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em]">
                         {isWebLanguage ? 'VISUAL PREVIEW ENVIRONMENT' : 'SIMULATED TERMINAL'}
@@ -547,8 +547,8 @@ const App: React.FC = () => {
             )}
 
             {activeTab === 'history' && (
-              <div className="bg-white rounded-2xl border border-slate-custom shadow-xl overflow-hidden min-h-[600px]">
-                <div className="px-6 py-4 border-b border-slate-custom flex justify-between items-center bg-slate-50">
+              <div className="bg-white rounded-2xl border border-slate-custom shadow-xl overflow-hidden min-h-[50vh] md:min-h-[600px]">
+                <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-custom flex justify-between items-center bg-slate-50 gap-2">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">SESSION ARCHIVE</span>
                   <button 
                     onClick={() => setHistory([])}
@@ -562,9 +562,9 @@ const App: React.FC = () => {
                     <div 
                       key={item.id} 
                       onClick={() => loadHistoryItem(item)}
-                      className="p-8 hover:bg-slate-50 transition-all group cursor-pointer border-l-4 border-transparent hover:border-blue-500"
+                      className="p-4 md:p-8 hover:bg-slate-50 transition-all group cursor-pointer border-l-4 border-transparent hover:border-blue-500"
                     >
-                      <div className="flex justify-between items-start mb-3">
+                      <div className="flex justify-between items-start mb-2 md:mb-3 gap-2">
                         <div className="flex items-center gap-4">
                           <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
                             item.type === 'Review' ? 'bg-orange-100 text-orange-600' :
@@ -594,7 +594,7 @@ const App: React.FC = () => {
 
         {showSettings && (
           <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-            <div className="bg-white rounded-[2.5rem] w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/20">
+            <div className="bg-white rounded-[2.5rem] w-full max-w-md max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/20">
               <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                 <h3 className="font-black text-slate-800 flex items-center gap-3">
                   <i className="fas fa-sliders text-blue-600"></i> WORKSPACE CONFIG
@@ -641,7 +641,7 @@ const App: React.FC = () => {
 
         {showProfile && (
           <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
-            <div className="bg-white rounded-[3rem] w-full max-w-sm overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="bg-white rounded-[3rem] w-full max-w-sm max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl animate-in zoom-in-95 duration-300">
               <div className="h-32 bg-gradient-to-br from-indigo-600 via-blue-600 to-purple-600 relative">
                 <button onClick={() => setShowProfile(false)} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 text-white/80 hover:bg-black/40 transition-all">
                   <i className="fas fa-times text-xs"></i>

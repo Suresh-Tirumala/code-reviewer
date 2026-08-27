@@ -23,6 +23,17 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+        html, body {
+            overflow-x: hidden;
+        }
+        @media (max-width: 640px) {
+            body { font-size: 14px; }
+            .code-font { font-size: 13px !important; line-height: 1.6; }
+        }
+        @media (min-width: 641px) {
+            .code-font { font-size: 15px !important; }
+        }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
         .code-font {
             font-family: 'Fira Code', 'Cascadia Code', 'Source Code Pro', monospace;
             font-size: 15px !important;

@@ -129,9 +129,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter, onAboutClick,
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative z-10 py-32 px-6 bg-black">
+      <section id="features" className="relative z-10 py-20 md:py-32 px-6 bg-black">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
+          <div className="text-center mb-12 md:mb-24">
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

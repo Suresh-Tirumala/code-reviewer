@@ -14,7 +14,21 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 5173,
-      strictPort: true,
-    }
+      strictPort: false,
+    },
+    build: {
+      chunkSizeWarningLimit: 1000, // raise limit to 1MB to suppress warnings
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split large 3D/animation libraries into their own chunks
+            'three-vendor': ['three', '@react-three/fiber'],
+            'animation-vendor': ['gsap', 'motion', 'ogl'],
+            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            'ui-vendor': ['lucide-react'],
+          },
+        },
+      },
+    },
   };
 });

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { chatWithAssistant, generateSpeech } from '../services/geminiService';
+import { chatWithAssistant, generateSpeech } from '../services/aiService';
 import { ChatMessage } from '../types';
 
 interface AssistantPanelProps {
@@ -50,6 +50,7 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
   const isOpenRef = useRef(isOpen);
   const audioContextRef = useRef<AudioContext | null>(null);
   const currentSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const generatingAudioIdRef = useRef<number | null>(null);
 
   // Sync ref with state to handle async closures correctly
   useEffect(() => {
@@ -120,7 +121,44 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
       } catch (e) {}
       currentSourceRef.current = null;
     }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    generatingAudioIdRef.current = null;
+    setIsGeneratingAudio(null);
     setPlayingAudioId(null);
+  };
+
+  const playWithBrowserTTS = (text: string, index: number) => {
+    if (!('speechSynthesis' in window)) {
+      throw new Error('Browser speech synthesis is not supported');
+    }
+
+    const spokenText = text
+      .replace(/`{1,3}[\s\S]*?`{1,3}/g, 'Code block omitted.')
+      .replace(/[#*_>~-]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!spokenText) {
+      throw new Error('No speakable content');
+    }
+
+    const utterance = new SpeechSynthesisUtterance(spokenText);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    utterance.onend = () => {
+      setPlayingAudioId(null);
+    };
+    utterance.onerror = () => {
+      setPlayingAudioId(null);
+    };
+
+    setIsGeneratingAudio(null);
+    setPlayingAudioId(index);
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
   };
 
   const handleListen = async (text: string, index: number) => {
@@ -131,23 +169,28 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
 
     if (playingAudioId === index || isGeneratingAudio === index) {
       stopAudio();
-      setIsGeneratingAudio(null);
       return;
     }
     
     stopAudio();
+    generatingAudioIdRef.current = index;
     setIsGeneratingAudio(index);
     
     try {
       // Start generating
       const base64Audio = await generateSpeech(text);
-      if (!base64Audio) throw new Error("No audio data received");
+      if (!base64Audio) {
+        if (generatingAudioIdRef.current !== index) return;
+        playWithBrowserTTS(text, index);
+        return;
+      }
 
       const ctx = audioContextRef.current!;
       const audioBuffer = await decodeAudioData(decode(base64Audio), ctx, 24000, 1);
       
-      if (isGeneratingAudio !== index) return; // User cancelled
+      if (generatingAudioIdRef.current !== index) return;
       
+      generatingAudioIdRef.current = null;
       setIsGeneratingAudio(null);
       setPlayingAudioId(index);
 
@@ -164,7 +207,16 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
       currentSourceRef.current = source;
       source.start(0); // Play immediately
     } catch (e) {
+      try {
+        if (generatingAudioIdRef.current === index) {
+          playWithBrowserTTS(text, index);
+          return;
+        }
+      } catch (fallbackError) {
+        console.error("TTS fallback failed:", fallbackError);
+      }
       console.error("TTS failed:", e);
+      generatingAudioIdRef.current = null;
       setIsGeneratingAudio(null);
       setPlayingAudioId(null);
     }
@@ -175,7 +227,7 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
       {/* Trigger Button */}
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-10 right-10 w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-full shadow-[0_10px_40px_rgba(37,99,235,0.4)] flex items-center justify-center hover:scale-110 hover:-translate-y-1 active:scale-95 transition-all z-40 border-4 border-white group"
+        className="fixed bottom-24 right-5 w-14 h-14 sm:bottom-10 sm:right-10 sm:w-16 sm:h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-full shadow-[0_10px_40px_rgba(37,99,235,0.4)] flex items-center justify-center hover:scale-110 hover:-translate-y-1 active:scale-95 transition-all z-40 border-4 border-white group"
       >
         <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-20 group-hover:hidden"></div>
         <i className="fas fa-robot text-2xl relative"></i>
@@ -190,7 +242,7 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
       {isOpen && (
         <div className="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.15)] z-50 flex flex-col animate-in slide-in-from-right duration-300 ease-out border-l border-slate-100 overflow-hidden">
           
-          <div className="p-6 bg-slate-900 text-white flex justify-between items-center shrink-0 shadow-lg">
+          <div className="p-4 md:p-6 bg-slate-900 text-white flex justify-between items-center shrink-0 shadow-lg">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-lg shadow-inner shadow-white/20 border border-blue-400/30">
                 <i className="fas fa-robot"></i>
@@ -287,7 +339,7 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
             )}
           </div>
 
-          <div className="p-6 border-t border-slate-100 bg-white">
+          <div className="p-4 md:p-6 border-t border-slate-100 bg-white">
             <div className="relative flex items-end gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-2.5 transition-all focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-50 focus-within:bg-white">
               <textarea 
                 rows={1}
