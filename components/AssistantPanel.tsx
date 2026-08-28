@@ -97,11 +97,12 @@ export const AssistantPanel: React.FC<AssistantPanelProps> = ({ currentCode }) =
       if (!isOpenRef.current) {
         setUnreadCount(prev => prev + 1);
       }
-    } catch (error) {
+    } catch (error: any) {
+      const message = error?.message || "Unknown error occurred.";
       setMessages(prev => {
         const newMessages = [...prev];
         if (newMessages.length > 0) {
-          newMessages[newMessages.length - 1] = { role: 'model', text: "⚠️ **System Error**: Connectivity interrupted. Please check your configuration." };
+          newMessages[newMessages.length - 1] = { role: 'model', text: `⚠️ **System Error**: ${message}` };
         }
         return newMessages;
       });

@@ -14,7 +14,7 @@ const getGeminiKey = () => (process.env as any).GEMINI_API_KEY || "";
  */
 async function groqChat(
   messages: any[], 
-  model: string = "llama-3.3-70b-versatile",
+  model: string = "qwen/qwen3.8-27b",
   jsonMode: boolean = false
 ) {
   const apiKey = getGroqKey();
@@ -63,7 +63,7 @@ export const analyzeCode = async (
   const result = await groqChat([
     { role: "system", content: "You are a specialized code analysis agent that outputs strictly valid JSON." },
     { role: "user", content: prompt }
-  ], "llama-3.3-70b-versatile", true);
+  ], "qwen/qwen3.8-27b", true);
 
   const content = result.choices[0].message.content;
   return JSON.parse(content);
@@ -83,7 +83,7 @@ export const rewriteCode = async (
   const result = await groqChat([
     { role: "system", content: "You are a Senior Principal Developer. Refactor code and provide clear explanations." },
     { role: "user", content: prompt }
-  ], "llama-3.3-70b-versatile");
+  ], "qwen/qwen3.8-27b");
 
   const fullText = result.choices[0].message.content;
   onChunk(fullText);
@@ -112,7 +112,7 @@ export const runSimulatedCode = async (code: string, language: string): Promise<
   const result = await groqChat([
     { role: "system", content: "You are a code execution simulator. Output JSON." },
     { role: "user", content: prompt }
-  ], "llama-3.1-8b-instant", true);
+  ], "qwen/qwen3.6-27b", true);
 
   return JSON.parse(result.choices[0].message.content);
 };
@@ -133,7 +133,7 @@ export const chatWithAssistant = async (
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
+      model: "qwen/qwen3.8-27b",
       messages: [
         { role: "system", content: `You are a helpful coding assistant. Context: ${currentCode}` },
         ...history.map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.text })),
